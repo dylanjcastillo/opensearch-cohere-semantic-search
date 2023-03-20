@@ -11,3 +11,4 @@ NEWS_SAMPLE_DATASET = DATA / "news_sample.csv"
 NEWS_WITH_VECTORS_DATASET = DATA / "news_sample_with_vectors.csv"
 
 COHERE_API_KEY = os.getenv("COHERE_API_KEY")
+INDEX_NAME = "news-semantic-search"

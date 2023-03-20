@@ -1,10 +1,7 @@
 import cohere
 from fastapi import FastAPI
 
-from config import (
-    COHERE_API_KEY,
-    NEWS_WITH_VECTORS_DATASET,
-)
+from config import COHERE_API_KEY, INDEX_NAME
 
 from opensearchpy import OpenSearch
 
@@ -28,22 +25,21 @@ def read_root():
     return {"message": "Make a post request to /search to search through news articles"}
 
 
-@app.post("/ask")
+@app.post("/search")
 def ask(query: str):
     query_embedding = cohere_client.embed(texts=[query], model="small").embeddings[0]
 
-    open
-
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        messages=[
-            {"role": "user", "content": prompt},
-        ],
-        max_tokens=250,
-        temperature=0.2,
+    similar_news = opensearch_client.search(
+        index=INDEX_NAME,
+        body={
+            "query": {"knn": {"embedding": {"vector": query_embedding, "k": 10}}},
+        },
     )
+    response = [
+        {"title": r["_source"]["title"], "description": r["_source"]["description"]}
+        for r in similar_news["hits"]["hits"]
+    ]
 
     return {
-        "response": response["choices"][0]["message"]["content"],
-        "references": references,
+        "response": response,
     }

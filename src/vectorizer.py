@@ -4,6 +4,8 @@ from tqdm import tqdm
 
 from config import COHERE_API_KEY, NEWS_SAMPLE_DATASET, DATA
 
+from sklearn.metrics.pairwise import cosine_similarity
+
 
 def main():
     df = pd.read_csv(NEWS_SAMPLE_DATASET)

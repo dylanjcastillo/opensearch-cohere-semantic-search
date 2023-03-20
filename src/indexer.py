@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 from opensearchpy import OpenSearch, NotFoundError
-from config import NEWS_WITH_VECTORS_DATASET
+from config import NEWS_WITH_VECTORS_DATASET, INDEX_NAME
 
 from tqdm import tqdm
 
@@ -20,7 +20,7 @@ def main():
 
     body = {
         "settings": {
-            "index": {"knn": True, "knn.algo_param.ef_search": 100},
+            "index": {"knn": True, "knn.algo_param.ef_search": 512},
         },
         "mappings": {
             "properties": {
@@ -33,14 +33,14 @@ def main():
     }
 
     try:
-        client.indices.delete(index="news-semantic-search")
+        client.indices.delete(index=INDEX_NAME)
     except NotFoundError:
         pass
-    client.indices.create("news-semantic-search", body=body)
+    client.indices.create(INDEX_NAME, body=body)
 
-    for i, row in tqdm(df.iterrows()):
+    for i, row in tqdm(df.iterrows(), total=len(df)):
         client.index(
-            index="news-semantic-search",
+            index=INDEX_NAME,
             body={
                 "source_id": i,
                 "title": row["title"],
@@ -52,8 +52,8 @@ def main():
             },
         )
 
-    client.indices.refresh(index="news-semantic-search")
-    print("Done", client.cat.count(index="news-semantic-search", format="json"))
+    client.indices.refresh(index=INDEX_NAME)
+    print("Done", client.cat.count(index=INDEX_NAME, format="json"))
 
 
 if __name__ == "__main__":
