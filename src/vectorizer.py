@@ -4,8 +4,6 @@ from tqdm import tqdm
 
 from config import COHERE_API_KEY, NEWS_SAMPLE_DATASET, DATA
 
-from sklearn.metrics.pairwise import cosine_similarity
-
 
 def main():
     df = pd.read_csv(NEWS_SAMPLE_DATASET)
@@ -17,7 +15,7 @@ def main():
     vectors = []
 
     for idx, row in tqdm(df.iterrows(), total=len(df)):
-        batch.append(row["description"])
+        batch.append(row["text"])
 
         if len(batch) >= batch_size:
             response = cohere_client.embed(texts=batch, model=model)

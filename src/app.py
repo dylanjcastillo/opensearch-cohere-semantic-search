@@ -36,7 +36,11 @@ def ask(query: str):
         },
     )
     response = [
-        {"title": r["_source"]["title"], "description": r["_source"]["description"]}
+        {
+            "title": r["_source"]["title"],
+            "description": r["_source"]["description"],
+            "content": r["_source"]["content"],
+        }
         for r in similar_news["hits"]["hits"]
     ]
 

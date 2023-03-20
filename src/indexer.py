@@ -26,7 +26,8 @@ def main():
             "properties": {
                 "id": {"type": "integer"},
                 "title": {"type": "keyword"},
-                "description": {"type": "text"},
+                "content": {"type": "keyword"},
+                "description": {"type": "keyword"},
                 "embedding": {"type": "knn_vector", "dimension": 1024},
             }
         },
@@ -39,16 +40,17 @@ def main():
     client.indices.create(INDEX_NAME, body=body)
 
     for i, row in tqdm(df.iterrows(), total=len(df)):
+        embedding = [
+            float(x) for x in row["vector"].replace("[", "").replace("]", "").split(",")
+        ]
         client.index(
             index=INDEX_NAME,
             body={
                 "source_id": i,
                 "title": row["title"],
+                "content": row["content"],
                 "description": row["description"],
-                "embedding": [
-                    float(x)
-                    for x in row["vector"].replace("[", "").replace("]", "").split(",")
-                ],
+                "embedding": embedding,
             },
         )
 
