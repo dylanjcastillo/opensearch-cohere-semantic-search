@@ -1,4 +1,3 @@
-import numpy as np
 import pandas as pd
 from opensearchpy import OpenSearch, NotFoundError
 from config import NEWS_WITH_VECTORS_DATASET, INDEX_NAME

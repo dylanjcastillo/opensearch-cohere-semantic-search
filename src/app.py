@@ -21,7 +21,7 @@ cohere_client = cohere.Client(COHERE_API_KEY)
 
 
 @app.get("/")
-def read_root():
+def index():
     return {"message": "Make a post request to /search to search through news articles"}
 
 
