@@ -14,7 +14,7 @@ def main():
     batch = []
     vectors = []
 
-    for idx, row in tqdm(df.iterrows(), total=len(df)):
+    for _, row in tqdm(df.iterrows(), total=len(df)):
         batch.append(row["text"])
 
         if len(batch) >= batch_size:
