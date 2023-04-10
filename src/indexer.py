@@ -19,7 +19,7 @@ def main():
 
     body = {
         "settings": {
-            "index": {"knn": True, "knn.algo_param.ef_search": 512},
+            "index": {"knn": True},
         },
         "mappings": {
             "properties": {
@@ -45,7 +45,7 @@ def main():
         client.index(
             index=INDEX_NAME,
             body={
-                "source_id": i,
+                "id": i,
                 "title": row["title"],
                 "content": row["content"],
                 "description": row["description"],
