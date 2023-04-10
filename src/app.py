@@ -26,7 +26,7 @@ def index():
 
 
 @app.post("/search")
-def ask(query: str):
+def search(query: str):
     query_embedding = cohere_client.embed(texts=[query], model="small").embeddings[0]
 
     similar_news = opensearch_client.search(
